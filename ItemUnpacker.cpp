@@ -8,6 +8,30 @@ using namespace std;
 
 int ITM_HEADER1 = 0xE0F0A0B0; // weak
 int ITM_HEADER2 = 0xA0B0C0D0;
+
+
+void LogWriter(int LogType) {
+    ofstream myfile;
+    myfile.open("LogData.txt");
+    myfile << "Log Intialized!";
+    switch (LogType) {
+    case 1:
+        myfile << "[LOG]: Error Reading item file";
+        cout << "[LOG]: Error Reading item file";
+    case 2:
+        myfile << "[LOG]: Processing file...\n";
+        cout << "[LOG]: Processing file...\n";
+    case 3:
+        myfile << "[LOG]: Reading 8 Byte...\n";
+        cout << "[LOG]: Reading 8 Byte...\n";
+    }
+
+    myfile.close();
+}
+
+
+
+
 int fileread() {
     FILE *v4;
     FILE *v5;
@@ -15,17 +39,15 @@ int fileread() {
     int v14[2];
     int Buffer[2];
     int payload1[4] = { 0xB0,0xA0,0xF0,0xE0 };
-    ofstream myfile;
-    myfile.open("LogData.txt");
-    myfile << "Log Intialized!";
+
 
 
     v4 = fopen("./Table/item.itm", "rb");
 
     v5 = v4;
     if (!v5) {
-        myfile << "[LOG]: Error Reading item file";
-        cout << "[LOG]: Error Reading item file\n";
+       
+        LogWriter(1);
         MessageBoxA(0, "item table read failed", "Message", 0);
 
     }
@@ -34,9 +56,10 @@ int fileread() {
         fread(Buffer, 8, 1, v5);
         if (Buffer[0] == ITM_HEADER1 && Buffer[1] == ITM_HEADER2) {
 
-            cout << "[LOG]: Processing file...\n";
-            cout << "[LOG]: Reading 8 Byte...\n";
+            LogWriter(2);
             fread(v14, 8, 1, v5);
+            LogWriter(3);
+
         }
         else {
             MessageBoxA(0, "File Header is invalid.", "Error", 0);
@@ -47,7 +70,7 @@ int fileread() {
 
 
 
-    myfile.close();
+ 
     return 0;
 
 
@@ -74,6 +97,8 @@ void writelog()
     //   MessageBoxA(0, a1, "Message", 0);
 
 }
+
+
 
 
 
