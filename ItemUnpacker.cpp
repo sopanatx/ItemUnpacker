@@ -4,6 +4,7 @@
 #include <fstream>
 #include <windows.h>
 #include <io.h>
+#include "obfuscator.hpp"
 using namespace std;
 
 int ITM_HEADER1 = 0xE0F0A0B0; // weak
@@ -13,18 +14,22 @@ int ITM_HEADER2 = 0xA0B0C0D0;
 void LogWriter(int LogType) {
     ofstream myfile;
     myfile.open("LogData.txt");
-    myfile << "Log Intialized!";
+    myfile << OBFUSCATE("Log Intialized!");
     switch (LogType) {
     case 1:
-        myfile << "[LOG]: Error Reading item file";
-        cout << "[LOG]: Error Reading item file";
+        myfile << OBFUSCATE("[LOG]: Error Reading item file");
+        cout <<  OBFUSCATE("[LOG]: Error Reading item file");
+        
     case 2:
-        myfile << "[LOG]: Processing file...\n";
-        cout << "[LOG]: Processing file...\n";
+        myfile << OBFUSCATE("[LOG]: Processing file...\n");
+        cout << OBFUSCATE("[LOG]: Processing file...\n");
     case 3:
-        myfile << "[LOG]: Reading 8 Byte...\n";
-        cout << "[LOG]: Reading 8 Byte...\n";
+        myfile << OBFUSCATE("[LOG]: Reading 8 Byte...\n");
+        cout << OBFUSCATE("[LOG]: Reading 8 Byte...\n");
+        
+
     }
+
 
     myfile.close();
 }
@@ -48,12 +53,14 @@ int fileread() {
     if (!v5) {
        
         LogWriter(1);
-        MessageBoxA(0, "item table read failed", "Message", 0);
+        MessageBoxA(0, OBFUSCATE("item table read failed"), "Message", 0);
 
     }
     else {
-        cout << "[LOG]: Reading...\n";
+        cout << OBFUSCATE("[LOG]: Reading...\n");
         fread(Buffer, 8, 1, v5);
+        LogWriter(3);
+
         if (Buffer[0] == ITM_HEADER1 && Buffer[1] == ITM_HEADER2) {
 
             LogWriter(2);
@@ -62,7 +69,7 @@ int fileread() {
 
         }
         else {
-            MessageBoxA(0, "File Header is invalid.", "Error", 0);
+            MessageBoxA(0, OBFUSCATE("File Header is invalid."), "Error", 0);
 
         }
   
@@ -105,8 +112,8 @@ void writelog()
 int main()
 
 {
-    cout << "=========== GhostOnline Item Unpacker  V.1.1.0 Beta  [Powered By WasuthornX]  =========== \n";
-    cout << "[LOG]: Loading item file ....\n";
+    cout << OBFUSCATE("=========== GhostOnline Item Unpacker  V.1.1.0 Beta  [Powered By WasuthornX]  =========== \n");
+    cout << OBFUSCATE("[LOG]: Loading item file ....\n");
 
     writelog();
     std::cin.get();
